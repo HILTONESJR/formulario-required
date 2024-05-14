@@ -1,8 +1,7 @@
-import ehumCPF from "./valida-cpf.js";
-import ehMaiorIdade from "./valida-idade.js";
-
-const camposDoFormulario = document.querySelectorAll("[required]");
-const formulario = document.querySelector("[data-formulario]");
+import ehUmCPF from "./valida-cpf.js";
+import ehMaiorDeIdade from "./valida-idade.js";
+const camposDoFormulario = document.querySelectorAll('[required]')
+const formulario = document.querySelector('[data-formulario]');
 
 formulario.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -14,22 +13,21 @@ formulario.addEventListener("submit", (e) => {
         "cpf": e.target.elements["cpf"].value,
         "aniversario": e.target.elements["aniversario"].value,
     }
+
     localStorage.setItem("cadastro", JSON.stringify(listaRespostas));
 
-    window.location.href = './abrir-conta-form-2.html';
-
-    console.log(formulario)
+    window.location.href = "./abrir-conta-form-2.html";
 })
 
-camposDoFormulario.forEach((campo)=>{
-    campo.addEventListener("blur", ()=> verificaCampo(campo));
-    campo.addEventListener('invalid', evento => evento.preventDefault());
+camposDoFormulario.forEach((campo) => {
+    campo.addEventListener("blur", () => verificaCampo(campo));
+    campo.addEventListener("invalid", evento => evento.preventDefault())
 })
 
-const tiposDeErros = [
+const tiposDeErro = [
     'valueMissing',
-    'typeMisMatch',
-    'patternsMisMatch',
+    'typeMismatch',
+    'patternMismatch',
     'tooShort',
     'customError'
 ]
@@ -43,7 +41,7 @@ const mensagens = {
     email: {
         valueMissing: "O campo de e-mail não pode estar vazio.",
         typeMismatch: "Por favor, preencha um email válido.",
-        tooShort: "Por favor, preencha um e-mail válido."
+        tooShort: "Por favor, preencha um email válido."
     },
     rg: {
         valueMissing: "O campo de RG não pode estar vazio.",
@@ -64,28 +62,28 @@ const mensagens = {
         valueMissing: 'Você deve aceitar nossos termos antes de continuar.',
     }
 }
-function verificaCampo(campo) {
-    let mensagen = "";
-    campo.setCustomValidity('');
-    if (campo.name === "cpf" && campo.value.length >= 11) {
-        ehumCPF(campo);
-    }
-    if (campo.name == 'aniversario' && campo.value != ""){
-        ehMaiorIdade(campo);
-    }
 
-    tiposDeErros.forEach(erro => {
+function verificaCampo(campo) {
+    let mensagem = "";
+    campo.setCustomValidity('');
+    if (campo.name == "cpf" && campo.value.length >= 11) {
+        ehUmCPF(campo);
+    }
+    if (campo.name == "aniversario" && campo.value != "") {
+        ehMaiorDeIdade(campo);
+    }
+    tiposDeErro.forEach(erro => {
         if (campo.validity[erro]) {
-            mensagen = mensagens[campo.name][erro];
+            mensagem = mensagens[campo.name][erro];
+            console.log(mensagem);
         }
     })
-    const mensagenError = campo.parentNode.querySelector('.mensagem-erro');
+    const mensagemErro = campo.parentNode.querySelector('.mensagem-erro');
     const validadorDeInput = campo.checkValidity();
 
     if (!validadorDeInput) {
-        mensagenError.textContent = mensagen;
-    }else {
-        mensagenError.textContent = "";
+        mensagemErro.textContent = mensagem;
+    } else {
+        mensagemErro.textContent = "";
     }
-
 }
